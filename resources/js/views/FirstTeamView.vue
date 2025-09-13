@@ -4,7 +4,7 @@
     <div class="mb-8">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">First Team</h1>
+          <h1 class="text-3xl font-bold text-gray-900">First Team Management</h1>
           <p class="text-gray-600 mt-2">Manage New Radiant SC first team players</p>
         </div>
         <button
@@ -102,82 +102,103 @@
       </div>
     </div>
 
-    <!-- Players by Position -->
-    <div class="space-y-8">
-      <!-- Goalkeepers -->
-      <div v-if="playersByPosition.Goalkeeper?.length > 0">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-          Goalkeepers
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <PlayerCard
-            v-for="player in playersByPosition.Goalkeeper"
-            :key="player.id"
-            :player="player"
-            @view="viewPlayer"
-            @edit="editPlayer"
-            @delete="deletePlayer"
-            @toggle-captain="toggleCaptain"
-          />
-        </div>
+    <!-- Loading State -->
+    <div v-if="loading" class="flex justify-center items-center py-12">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p class="text-gray-600">Loading players...</p>
       </div>
+    </div>
 
-      <!-- Defenders -->
-      <div v-if="playersByPosition.Defender?.length > 0">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-          Defenders
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <PlayerCard
-            v-for="player in playersByPosition.Defender"
-            :key="player.id"
-            :player="player"
-            @view="viewPlayer"
-            @edit="editPlayer"
-            @delete="deletePlayer"
-            @toggle-captain="toggleCaptain"
-          />
-        </div>
-      </div>
-
-      <!-- Midfielders -->
-      <div v-if="playersByPosition.Midfielder?.length > 0">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          Midfielders
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <PlayerCard
-            v-for="player in playersByPosition.Midfielder"
-            :key="player.id"
-            :player="player"
-            @view="viewPlayer"
-            @edit="editPlayer"
-            @delete="deletePlayer"
-            @toggle-captain="toggleCaptain"
-          />
-        </div>
-      </div>
-
-      <!-- Forwards -->
-      <div v-if="playersByPosition.Forward?.length > 0">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-          Forwards
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <PlayerCard
-            v-for="player in playersByPosition.Forward"
-            :key="player.id"
-            :player="player"
-            @view="viewPlayer"
-            @edit="editPlayer"
-            @delete="deletePlayer"
-            @toggle-captain="toggleCaptain"
-          />
-        </div>
+    <!-- Players Table -->
+    <div v-else class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey #</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nationality</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="player in filteredPlayers" :key="player.id" class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img
+                      v-if="player.photo"
+                      :src="`/storage/${player.photo}`"
+                      :alt="player.display_name"
+                      class="h-10 w-10 rounded-full object-cover"
+                    />
+                    <div v-else class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                      <UserIcon class="h-6 w-6 text-gray-500" />
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900 flex items-center gap-2">
+                      {{ player.display_name }}
+                      <span v-if="player.is_captain" class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">C</span>
+                      <span v-else-if="player.is_vice_captain" class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">VC</span>
+                    </div>
+                    <div class="text-sm text-gray-500">{{ player.position_detail || player.position }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span :class="player.position_badge_class" class="px-2 py-1 rounded-full text-xs font-medium">
+                  {{ player.position }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
+                {{ player.jersey_number }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ player.age }} years
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ player.nationality }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span :class="player.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" class="px-2 py-1 rounded-full text-xs font-medium">
+                  {{ player.is_active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-2">
+                  <button
+                    @click="editPlayer(player)"
+                    class="text-blue-600 hover:text-blue-900"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    @click="deletePlayer(player)"
+                    class="text-red-600 hover:text-red-900"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    @click="toggleCaptain(player)"
+                    :class="[
+                      'px-2 py-1 rounded text-xs',
+                      player.is_captain || player.is_vice_captain
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-gray-100 text-gray-800'
+                    ]"
+                  >
+                    {{ player.is_captain ? 'Captain' : player.is_vice_captain ? 'Vice' : 'Make Captain' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -194,19 +215,19 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useApi } from '@/services/api'
+import api from '@/services/api'
 import {
   PlusIcon,
   UserGroupIcon,
   CheckCircleIcon,
   ClockIcon,
-  StarIcon
+  StarIcon,
+  UserIcon
 } from '@heroicons/vue/24/outline'
-import PlayerCard from '@/components/PlayerCard.vue'
 import PlayerModal from '@/components/PlayerModal.vue'
 
 const router = useRouter()
-const api = useApi()
+// API is already imported as default
 
 // State
 const players = ref([])
@@ -216,6 +237,7 @@ const positionFilter = ref('all')
 const statusFilter = ref('all')
 const isPlayerModalOpen = ref(false)
 const selectedPlayer = ref(null)
+const loading = ref(true)
 
 // Computed
 const filteredPlayers = computed(() => {
@@ -269,10 +291,24 @@ const playersByPosition = computed(() => {
 // Methods
 const fetchPlayers = async () => {
   try {
+    loading.value = true
     const response = await api.get('/players')
-    players.value = response.data.data || response.data
+    
+    // Handle both paginated and non-paginated responses
+    if (response.data.data) {
+      // Paginated response
+      players.value = response.data.data
+    } else if (Array.isArray(response.data)) {
+      // Direct array response
+      players.value = response.data
+    } else {
+      // Fallback
+      players.value = []
+    }
   } catch (error) {
     console.error('Error fetching players:', error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -295,9 +331,7 @@ const closePlayerModal = () => {
   selectedPlayer.value = null
 }
 
-const viewPlayer = (player) => {
-  router.push(`/academy/first-team/player/${player.id}`)
-}
+// Removed viewPlayer method as it's not needed for admin list view
 
 const editPlayer = (player) => {
   openPlayerModal(player)

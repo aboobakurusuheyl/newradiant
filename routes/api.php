@@ -103,9 +103,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // First team management (Admin only)
     Route::middleware(['role:admin'])->group(function () {
-        Route::apiResource('players', PlayerController::class);
-        Route::get('/players/position/{position}', [PlayerController::class, 'getByPosition']);
-        Route::get('/players/team/stats', [PlayerController::class, 'getTeamStats']);
+        Route::post('/players', [PlayerController::class, 'store']);
+        Route::put('/players/{player}', [PlayerController::class, 'update']);
+        Route::delete('/players/{player}', [PlayerController::class, 'destroy']);
         Route::post('/players/{player}/captain', [PlayerController::class, 'updateCaptainStatus']);
     });
     

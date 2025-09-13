@@ -263,7 +263,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useApi } from '@/services/api'
+import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import {
   ArrowLeftIcon,
@@ -275,7 +275,7 @@ import PlayerModal from '@/components/PlayerModal.vue'
 
 const route = useRoute()
 const router = useRouter()
-const api = useApi()
+// API is already imported as default
 const authStore = useAuthStore()
 
 // State

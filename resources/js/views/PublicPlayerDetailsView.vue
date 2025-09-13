@@ -232,7 +232,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useApi } from '@/services/api'
+import api from '@/services/api'
 import {
   ArrowLeftIcon,
   UserIcon,
@@ -242,7 +242,7 @@ import {
 
 const route = useRoute()
 const router = useRouter()
-const api = useApi()
+// API is already imported as default
 
 // State
 const player = ref(null)
