@@ -24,8 +24,8 @@
           :style="{ backgroundImage: `url(${section.image_url || getFallbackImage(section)})` }"
         ></div>
         
-        <!-- Gradient Overlay with black blur from right -->
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-black/80"></div>
+        <!-- Gradient Overlay with black blur from left -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent"></div>
         
         <!-- Content -->
         <div class="relative h-full flex items-center">
