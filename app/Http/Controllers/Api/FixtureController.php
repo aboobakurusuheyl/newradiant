@@ -9,8 +9,22 @@ use Illuminate\Support\Facades\Validator;
 
 class FixtureController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $limit = $request->get('limit', 20);
+        
+        if ($limit) {
+            $fixtures = Fixture::orderBy('match_date', 'desc')
+                ->orderBy('match_time', 'desc')
+                ->limit($limit)
+                ->get();
+            
+            return response()->json([
+                'data' => $fixtures,
+                'total' => $fixtures->count()
+            ]);
+        }
+        
         $fixtures = Fixture::orderBy('match_date', 'desc')
             ->orderBy('match_time', 'desc')
             ->paginate(20);

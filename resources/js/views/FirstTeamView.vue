@@ -1,24 +1,23 @@
 <template>
-  <div class="p-6">
+  <AdminLayout>
+    <div class="space-y-8">
     <!-- Header -->
-    <div class="mb-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900">First Team Management</h1>
-          <p class="text-gray-600 mt-2">Manage New Radiant SC first team players</p>
-        </div>
-        <button
-          @click="openPlayerModal()"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-        >
-          <PlusIcon class="h-5 w-5" />
-          Add Player
-        </button>
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">First Team Management</h1>
+        <p class="text-gray-600">Manage New Radiant SC first team players</p>
       </div>
+      <button
+        @click="openPlayerModal()"
+        class="bg-newradiant-blue hover:bg-newradiant-dark-blue text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+      >
+        <PlusIcon class="h-5 w-5" />
+        Add Player
+      </button>
     </div>
 
     <!-- Team Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
       <div class="bg-white rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="p-2 bg-blue-100 rounded-lg">
@@ -69,20 +68,25 @@
     </div>
 
     <!-- Filters and Search -->
-    <div class="bg-white rounded-lg shadow p-6 mb-6">
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search players..."
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex-1 max-w-md">
+          <div class="relative">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search players..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-newradiant-blue focus:border-transparent outline-none"
+            />
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+            </div>
+          </div>
         </div>
         <div class="flex gap-4">
           <select
             v-model="positionFilter"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-newradiant-blue focus:border-transparent outline-none"
           >
             <option value="all">All Positions</option>
             <option value="Goalkeeper">Goalkeeper</option>
@@ -92,7 +96,7 @@
           </select>
           <select
             v-model="statusFilter"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-newradiant-blue focus:border-transparent outline-none"
           >
             <option value="all">All Status</option>
             <option value="true">Active</option>
@@ -103,11 +107,9 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="flex justify-center items-center py-12">
-      <div class="text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p class="text-gray-600">Loading players...</p>
-      </div>
+    <div v-if="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-newradiant-blue"></div>
+      <p class="mt-4 text-gray-600 text-lg">Loading players...</p>
     </div>
 
     <!-- Players Table -->
@@ -116,18 +118,18 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey #</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nationality</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey #</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nationality</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="player in filteredPlayers" :key="player.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-4 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <img
@@ -150,48 +152,57 @@
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-4 py-4 whitespace-nowrap">
                 <span :class="player.position_badge_class" class="px-2 py-1 rounded-full text-xs font-medium">
                   {{ player.position }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
                 {{ player.jersey_number }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ player.age }} years
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ player.nationality }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-4 py-4 whitespace-nowrap">
                 <span :class="player.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" class="px-2 py-1 rounded-full text-xs font-medium">
                   {{ player.is_active ? 'Active' : 'Inactive' }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex space-x-2">
+              <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex items-center space-x-2">
                   <button
                     @click="editPlayer(player)"
-                    class="text-blue-600 hover:text-blue-900"
+                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-newradiant-blue bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-newradiant-blue transition-colors"
                   >
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
                     Edit
                   </button>
                   <button
                     @click="deletePlayer(player)"
-                    class="text-red-600 hover:text-red-900"
+                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-600 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
                   >
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                     Delete
                   </button>
                   <button
                     @click="toggleCaptain(player)"
                     :class="[
-                      'px-2 py-1 rounded text-xs',
+                      'inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors',
                       player.is_captain || player.is_vice_captain
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-100 focus:ring-yellow-500'
+                        : 'text-gray-600 bg-gray-50 hover:bg-gray-100 focus:ring-gray-500'
                     ]"
                   >
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                     {{ player.is_captain ? 'Captain' : player.is_vice_captain ? 'Vice' : 'Make Captain' }}
                   </button>
                 </div>
@@ -209,12 +220,14 @@
       @close="closePlayerModal"
       @save="savePlayer"
     />
-  </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import AdminLayout from '@/components/AdminLayout.vue'
 import api from '@/services/api'
 import {
   PlusIcon,

@@ -123,65 +123,105 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Image</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="article in filteredNews" :key="article.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 h-12 w-12">
-                      <img 
-                        :src="article.featured_image || '/placeholder-news.jpg'" 
-                        :alt="article.title"
-                        class="h-12 w-12 rounded-lg object-cover"
-                      />
-                    </div>
-                    <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">{{ article.title }}</div>
-                      <div class="text-sm text-gray-500 line-clamp-1">{{ article.excerpt || article.content?.substring(0, 100) + '...' }}</div>
+                <!-- Image Thumbnail -->
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="flex-shrink-0 h-16 w-16">
+                    <img 
+                      v-if="article.featured_image"
+                      :src="getImageUrl(article.featured_image)" 
+                      :alt="article.title"
+                      class="h-16 w-16 rounded-lg object-cover border border-gray-200"
+                      @error="handleImageError"
+                    />
+                    <div v-else class="h-16 w-16 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center border border-gray-200">
+                      <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {{ article.category }}
+                
+                <!-- Article Info -->
+                <td class="px-4 py-4">
+                  <div class="max-w-xs">
+                    <div class="text-sm font-medium text-gray-900 mb-1 line-clamp-2">{{ article.title }}</div>
+                    <div class="text-xs text-gray-500 line-clamp-2">{{ article.excerpt || article.content?.substring(0, 120) + '...' }}</div>
+                    <div class="mt-2 text-xs text-gray-400">
+                      by {{ article.author?.name || 'Unknown' }}
+                    </div>
+                  </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {{ article.author?.name || 'Unknown' }}
+                
+                <!-- Category -->
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {{ article.category || 'General' }}
+                  </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex flex-wrap gap-1">
-                    <span v-if="article.is_published" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                
+                <!-- Status -->
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="flex flex-col gap-1">
+                    <span v-if="article.is_published" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
                       Published
                     </span>
-                    <span v-else class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    <span v-else class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a2 2 0 114 0 2 2 0 01-4 0zm8 0a2 2 0 114 0 2 2 0 01-4 0z" clip-rule="evenodd" />
+                      </svg>
                       Draft
                     </span>
-                    <span v-if="article.is_featured" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <span v-if="article.is_featured" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
                       Featured
                     </span>
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ formatDate(article.published_at) }}
+                
+                <!-- Published Date -->
+                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <div v-if="article.published_at">
+                    {{ formatDate(article.published_at) }}
+                  </div>
+                  <div v-else class="text-gray-400 italic">
+                    Not published
+                  </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div class="flex space-x-2">
+                
+                <!-- Actions -->
+                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                  <div class="flex items-center space-x-2">
                     <button 
                       @click="editArticle(article)"
-                      class="text-newradiant-blue hover:text-newradiant-dark-blue"
+                      class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-newradiant-blue bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-newradiant-blue transition-colors"
                     >
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
                       Edit
                     </button>
                     <button 
-                      @click="deleteArticle(article)"
-                      class="text-red-600 hover:text-red-900"
+                      @click="deleteArticle(article.id)"
+                      class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-600 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
                     >
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                       Delete
                     </button>
                   </div>
@@ -271,21 +311,14 @@
                 </div>
                 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Published Date</label>
-                  <input 
-                    v-model="articleForm.published_at"
-                    type="datetime-local"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-newradiant-blue focus:border-transparent outline-none"
-                  />
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Expires Date</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Expiry Date (Optional)</label>
                   <input 
                     v-model="articleForm.expires_at"
-                    type="datetime-local"
+                    type="date"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-newradiant-blue focus:border-transparent outline-none"
+                    placeholder="Leave empty for no expiry"
                   />
+                  <p class="text-xs text-gray-500 mt-1">Leave empty if the article should not expire</p>
                 </div>
                 
                 <div class="md:col-span-2">
@@ -348,8 +381,11 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
+import { useToast } from 'vue-toastification'
 import AdminLayout from '@/components/AdminLayout.vue'
 import api from '@/services/api'
+
+const toast = useToast()
 
 // Reactive data
 const news = ref([])
@@ -372,7 +408,6 @@ const articleForm = ref({
   tags: [],
   is_published: false,
   is_featured: false,
-  published_at: '',
   expires_at: '',
   featured_image: null
 })
@@ -456,22 +491,45 @@ const submitArticle = async () => {
     // Add all form fields
     Object.keys(articleForm.value).forEach(key => {
       if (key === 'tags') {
-        formData.append('tags', JSON.stringify(articleForm.value[key]))
+        // Send tags as individual array items
+        if (Array.isArray(articleForm.value[key])) {
+          articleForm.value[key].forEach((tag, index) => {
+            formData.append(`tags[${index}]`, tag)
+          })
+        }
       } else if (key === 'featured_image' && articleForm.value[key]) {
         formData.append('featured_image', articleForm.value[key])
-      } else if (articleForm.value[key] !== null) {
+      } else if (key === 'is_published' || key === 'is_featured') {
+        formData.append(key, articleForm.value[key] ? '1' : '0')
+      } else if (articleForm.value[key] !== null && articleForm.value[key] !== undefined) {
         formData.append(key, articleForm.value[key])
       }
     })
+
+    // Automatically set published_at when publishing
+    if (articleForm.value.is_published) {
+      formData.append('published_at', new Date().toISOString())
+    }
+
+    // Debug: Log form data
+    console.log('Form data being sent:')
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value)
+    }
 
     if (showAddModal.value) {
       await api.post('/content/news', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
+      toast.success('Article created successfully!')
     } else {
-      await api.put(`/content/news/${selectedArticle.value.id}`, formData, {
+      console.log('Editing article:', selectedArticle.value.id)
+      console.log('Form data:', articleForm.value)
+      const response = await api.put(`/content/news/${selectedArticle.value.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
+      console.log('Update response:', response.data)
+      toast.success('Article updated successfully!')
     }
 
     await loadNews()
@@ -479,17 +537,26 @@ const submitArticle = async () => {
     closeModal()
   } catch (error) {
     console.error('Failed to save article:', error)
-    alert('Failed to save article. Please try again.')
+    console.error('Error response:', error.response?.data)
+    toast.error('Failed to save article. Please try again.')
   } finally {
     isSubmitting.value = false
   }
 }
 
 const editArticle = (article) => {
+  console.log('Edit article clicked:', article)
   selectedArticle.value = article
-  articleForm.value = { ...article }
+  
+  // Create form data without published_at (it will be set automatically when publishing)
+  const { published_at, ...formData } = article
+  articleForm.value = { ...formData }
+  
   tagsInput.value = article.tags ? article.tags.join(', ') : ''
   showEditModal.value = true
+  console.log('Edit modal should be visible:', showEditModal.value)
+  console.log('Selected article:', selectedArticle.value)
+  console.log('Article form:', articleForm.value)
 }
 
 const deleteArticle = async (article) => {
@@ -499,9 +566,10 @@ const deleteArticle = async (article) => {
     await api.delete(`/content/news/${article.id}`)
     await loadNews()
     await loadStats()
+    toast.success('Article deleted successfully!')
   } catch (error) {
     console.error('Failed to delete article:', error)
-    alert('Failed to delete article. Please try again.')
+    toast.error('Failed to delete article. Please try again.')
   }
 }
 
@@ -518,11 +586,28 @@ const closeModal = () => {
     tags: [],
     is_published: false,
     is_featured: false,
-    published_at: '',
     expires_at: '',
     featured_image: null
   }
   tagsInput.value = ''
+}
+
+const getImageUrl = (imagePath) => {
+  if (imagePath.startsWith('http')) {
+    return imagePath
+  }
+  if (imagePath.startsWith('img/')) {
+    return `/${imagePath}`
+  }
+  if (imagePath.startsWith('storage/')) {
+    return `/${imagePath}`
+  }
+  return `/${imagePath}`
+}
+
+const handleImageError = (event) => {
+  event.target.style.display = 'none'
+  event.target.nextElementSibling.style.display = 'flex'
 }
 
 const formatDate = (date) => {
@@ -555,6 +640,13 @@ onMounted(async () => {
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

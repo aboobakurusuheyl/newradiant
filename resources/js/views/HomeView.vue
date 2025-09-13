@@ -173,7 +173,7 @@ const fetchNews = async () => {
 const fetchFixtures = async () => {
   try {
     fixturesLoading.value = true
-    const response = await api.get('/fixtures')
+    const response = await api.get('/fixtures?limit=3')
     fixtures.value = response.data.data.map(fixture => ({
       ...fixture,
       competition: 'Dhivehi Premier League',
