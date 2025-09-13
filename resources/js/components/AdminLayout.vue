@@ -212,6 +212,7 @@ import {
   ShoppingBagIcon,
   ShoppingCartIcon,
   PhotoIcon,
+  TrophyIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Logo from './logo.vue'
@@ -274,6 +275,7 @@ const managementItems = computed(() => {
   // Add store management for admin only
   if (userRole.value === 'admin') {
     items.push(
+      { name: 'First Team', href: '/academy/first-team', icon: TrophyIcon, current: route.path.startsWith('/academy/first-team') },
       { name: 'Products', href: '/academy/products', icon: ShoppingBagIcon, current: route.path.startsWith('/academy/products') },
       { name: 'Orders', href: '/academy/orders', icon: ShoppingCartIcon, current: route.path.startsWith('/academy/orders') },
       { name: 'News Management', href: '/academy/news-management', icon: NewspaperIcon, current: route.path.startsWith('/academy/news-management') },

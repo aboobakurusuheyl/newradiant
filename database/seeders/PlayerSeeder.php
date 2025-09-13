@@ -1,0 +1,297 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\Player;
+
+class PlayerSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Clear existing players
+        Player::truncate();
+
+        $players = [
+            // Goalkeepers
+            [
+                'first_name' => 'Mohamed',
+                'last_name' => 'Faisal',
+                'nickname' => 'Faisal',
+                'jersey_number' => 1,
+                'position' => 'Goalkeeper',
+                'position_detail' => 'Goalkeeper',
+                'date_of_birth' => '1995-03-15',
+                'nationality' => 'Maldives',
+                'height' => 185,
+                'weight' => 82,
+                'preferred_foot' => 'Right',
+                'biography' => 'Experienced goalkeeper with excellent reflexes and leadership qualities.',
+                'career_stats' => ['goals' => 0, 'assists' => 2, 'appearances' => 45, 'clean_sheets' => 18],
+                'achievements' => ['Dhivehi Premier League Winner 2020', 'Best Goalkeeper Award 2021'],
+                'contract_start' => '2023-01-01',
+                'contract_end' => '2025-12-31',
+                'is_active' => true,
+                'is_captain' => true,
+                'is_vice_captain' => false,
+                'sort_order' => 1
+            ],
+            [
+                'first_name' => 'Ahmed',
+                'last_name' => 'Nizam',
+                'nickname' => 'Nizam',
+                'jersey_number' => 13,
+                'position' => 'Goalkeeper',
+                'position_detail' => 'Goalkeeper',
+                'date_of_birth' => '1998-07-22',
+                'nationality' => 'Maldives',
+                'height' => 180,
+                'weight' => 75,
+                'preferred_foot' => 'Right',
+                'biography' => 'Young and promising goalkeeper with great potential.',
+                'career_stats' => ['goals' => 0, 'assists' => 0, 'appearances' => 12, 'clean_sheets' => 5],
+                'achievements' => [],
+                'contract_start' => '2024-01-01',
+                'contract_end' => '2026-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 2
+            ],
+
+            // Defenders
+            [
+                'first_name' => 'Hussain',
+                'last_name' => 'Sifan',
+                'nickname' => 'Sifan',
+                'jersey_number' => 2,
+                'position' => 'Defender',
+                'position_detail' => 'Right Back',
+                'date_of_birth' => '1992-11-08',
+                'nationality' => 'Maldives',
+                'height' => 175,
+                'weight' => 70,
+                'preferred_foot' => 'Right',
+                'biography' => 'Versatile defender known for his pace and crossing ability.',
+                'career_stats' => ['goals' => 3, 'assists' => 8, 'appearances' => 78, 'tackles' => 156],
+                'achievements' => ['Dhivehi Premier League Winner 2020', 'FA Cup Winner 2021'],
+                'contract_start' => '2022-01-01',
+                'contract_end' => '2024-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => true,
+                'sort_order' => 3
+            ],
+            [
+                'first_name' => 'Ali',
+                'last_name' => 'Ashfaq',
+                'nickname' => 'Ashfaq',
+                'jersey_number' => 3,
+                'position' => 'Defender',
+                'position_detail' => 'Center Back',
+                'date_of_birth' => '1985-09-06',
+                'nationality' => 'Maldives',
+                'height' => 182,
+                'weight' => 85,
+                'preferred_foot' => 'Right',
+                'biography' => 'Veteran defender with exceptional leadership and aerial ability.',
+                'career_stats' => ['goals' => 12, 'assists' => 5, 'appearances' => 120, 'tackles' => 298],
+                'achievements' => ['Dhivehi Premier League Winner 2018, 2020', 'FA Cup Winner 2019, 2021', 'SAFF Championship Winner 2018'],
+                'contract_start' => '2021-01-01',
+                'contract_end' => '2024-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 4
+            ],
+            [
+                'first_name' => 'Mohamed',
+                'last_name' => 'Umair',
+                'nickname' => 'Umair',
+                'jersey_number' => 4,
+                'position' => 'Defender',
+                'position_detail' => 'Center Back',
+                'date_of_birth' => '1990-04-12',
+                'nationality' => 'Maldives',
+                'height' => 188,
+                'weight' => 88,
+                'preferred_foot' => 'Left',
+                'biography' => 'Strong and commanding center back with excellent positioning.',
+                'career_stats' => ['goals' => 8, 'assists' => 3, 'appearances' => 95, 'tackles' => 234],
+                'achievements' => ['Dhivehi Premier League Winner 2020', 'Best Defender Award 2022'],
+                'contract_start' => '2023-01-01',
+                'contract_end' => '2025-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 5
+            ],
+            [
+                'first_name' => 'Ibrahim',
+                'last_name' => 'Mahudhee',
+                'nickname' => 'Mahudhee',
+                'jersey_number' => 5,
+                'position' => 'Defender',
+                'position_detail' => 'Left Back',
+                'date_of_birth' => '1993-08-25',
+                'nationality' => 'Maldives',
+                'height' => 178,
+                'weight' => 72,
+                'preferred_foot' => 'Left',
+                'biography' => 'Attacking full-back with great stamina and crossing ability.',
+                'career_stats' => ['goals' => 5, 'assists' => 12, 'appearances' => 67, 'tackles' => 145],
+                'achievements' => ['FA Cup Winner 2021'],
+                'contract_start' => '2022-01-01',
+                'contract_end' => '2024-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 6
+            ],
+
+            // Midfielders
+            [
+                'first_name' => 'Hamza',
+                'last_name' => 'Mohamed',
+                'nickname' => 'Hamza',
+                'jersey_number' => 6,
+                'position' => 'Midfielder',
+                'position_detail' => 'Defensive Midfielder',
+                'date_of_birth' => '1991-12-03',
+                'nationality' => 'Maldives',
+                'height' => 180,
+                'weight' => 78,
+                'preferred_foot' => 'Right',
+                'biography' => 'Hard-working defensive midfielder with excellent passing range.',
+                'career_stats' => ['goals' => 7, 'assists' => 15, 'appearances' => 89, 'passes' => 2340],
+                'achievements' => ['Dhivehi Premier League Winner 2020', 'Best Midfielder Award 2021'],
+                'contract_start' => '2021-01-01',
+                'contract_end' => '2024-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 7
+            ],
+            [
+                'first_name' => 'Ahmed',
+                'last_name' => 'Rasheed',
+                'nickname' => 'Rasheed',
+                'jersey_number' => 8,
+                'position' => 'Midfielder',
+                'position_detail' => 'Central Midfielder',
+                'date_of_birth' => '1994-05-18',
+                'nationality' => 'Maldives',
+                'height' => 176,
+                'weight' => 74,
+                'preferred_foot' => 'Right',
+                'biography' => 'Creative midfielder with excellent vision and ball control.',
+                'career_stats' => ['goals' => 12, 'assists' => 22, 'appearances' => 76, 'passes' => 1890],
+                'achievements' => ['FA Cup Winner 2021', 'Young Player of the Year 2020'],
+                'contract_start' => '2023-01-01',
+                'contract_end' => '2026-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 8
+            ],
+            [
+                'first_name' => 'Mohamed',
+                'last_name' => 'Irufan',
+                'nickname' => 'Irufan',
+                'jersey_number' => 10,
+                'position' => 'Midfielder',
+                'position_detail' => 'Attacking Midfielder',
+                'date_of_birth' => '1988-02-14',
+                'nationality' => 'Maldives',
+                'height' => 174,
+                'weight' => 70,
+                'preferred_foot' => 'Left',
+                'biography' => 'Experienced playmaker with exceptional technical ability.',
+                'career_stats' => ['goals' => 25, 'assists' => 35, 'appearances' => 110, 'passes' => 3120],
+                'achievements' => ['Dhivehi Premier League Winner 2018, 2020', 'FA Cup Winner 2019, 2021', 'Player of the Year 2019'],
+                'contract_start' => '2020-01-01',
+                'contract_end' => '2024-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 9
+            ],
+
+            // Forwards
+            [
+                'first_name' => 'Ali',
+                'last_name' => 'Fasir',
+                'nickname' => 'Fasir',
+                'jersey_number' => 7,
+                'position' => 'Forward',
+                'position_detail' => 'Right Winger',
+                'date_of_birth' => '1996-09-30',
+                'nationality' => 'Maldives',
+                'height' => 172,
+                'weight' => 68,
+                'preferred_foot' => 'Left',
+                'biography' => 'Pacy winger with excellent dribbling and crossing ability.',
+                'career_stats' => ['goals' => 18, 'assists' => 28, 'appearances' => 82, 'shots' => 156],
+                'achievements' => ['Dhivehi Premier League Winner 2020', 'Top Scorer 2022'],
+                'contract_start' => '2022-01-01',
+                'contract_end' => '2025-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 10
+            ],
+            [
+                'first_name' => 'Hassan',
+                'last_name' => 'Naiz',
+                'nickname' => 'Naiz',
+                'jersey_number' => 9,
+                'position' => 'Forward',
+                'position_detail' => 'Center Forward',
+                'date_of_birth' => '1997-01-20',
+                'nationality' => 'Maldives',
+                'height' => 185,
+                'weight' => 82,
+                'preferred_foot' => 'Right',
+                'biography' => 'Clinical striker with excellent finishing and aerial ability.',
+                'career_stats' => ['goals' => 32, 'assists' => 8, 'appearances' => 74, 'shots' => 198],
+                'achievements' => ['FA Cup Winner 2021', 'Golden Boot Winner 2021, 2022'],
+                'contract_start' => '2023-01-01',
+                'contract_end' => '2026-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 11
+            ],
+            [
+                'first_name' => 'Mohamed',
+                'last_name' => 'Nizam',
+                'nickname' => 'Nizam',
+                'jersey_number' => 11,
+                'position' => 'Forward',
+                'position_detail' => 'Left Winger',
+                'date_of_birth' => '1999-06-10',
+                'nationality' => 'Maldives',
+                'height' => 170,
+                'weight' => 65,
+                'preferred_foot' => 'Right',
+                'biography' => 'Young and exciting winger with great potential.',
+                'career_stats' => ['goals' => 8, 'assists' => 12, 'appearances' => 45, 'shots' => 89],
+                'achievements' => ['Young Player of the Year 2023'],
+                'contract_start' => '2024-01-01',
+                'contract_end' => '2027-12-31',
+                'is_active' => true,
+                'is_captain' => false,
+                'is_vice_captain' => false,
+                'sort_order' => 12
+            ]
+        ];
+
+        foreach ($players as $playerData) {
+            Player::create($playerData);
+        }
+    }
+}

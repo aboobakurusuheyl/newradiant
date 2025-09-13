@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\PaymentRequestController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\PlayerController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\FixtureController;
@@ -23,6 +24,10 @@ Route::get('/news', [NewsController::class, 'index']);
 Route::get('/news/{news}', [NewsController::class, 'show']);
 Route::get('/fixtures', [FixtureController::class, 'index']);
 Route::get('/fixtures/{fixture}', [FixtureController::class, 'show']);
+Route::get('/players', [PlayerController::class, 'index']);
+Route::get('/players/{player}', [PlayerController::class, 'show']);
+Route::get('/players/position/{position}', [PlayerController::class, 'getByPosition']);
+Route::get('/players/team/stats', [PlayerController::class, 'getTeamStats']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -94,6 +99,14 @@ Route::middleware('auth:sanctum')->group(function () {
         
         // Content statistics
         Route::get('/content/stats', [ContentController::class, 'getContentStats']);
+    });
+
+    // First team management (Admin only)
+    Route::middleware(['role:admin'])->group(function () {
+        Route::apiResource('players', PlayerController::class);
+        Route::get('/players/position/{position}', [PlayerController::class, 'getByPosition']);
+        Route::get('/players/team/stats', [PlayerController::class, 'getTeamStats']);
+        Route::post('/players/{player}/captain', [PlayerController::class, 'updateCaptainStatus']);
     });
     
     // Schedule management (Admin/Coach only)

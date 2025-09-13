@@ -16,6 +16,11 @@ const router = createRouter({
             component: () => import("@/views/AboutView.vue"),
         },
         {
+            path: "/player/:id",
+            name: "player-details",
+            component: () => import("@/views/PublicPlayerDetailsView.vue"),
+        },
+        {
             path: "/contact",
             name: "contact",
             component: () => import("@/views/ContactView.vue"),
@@ -150,6 +155,18 @@ const router = createRouter({
             path: "/academy/hero-management",
             name: "academy-hero-management",
             component: () => import("@/views/HeroSectionManagementView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
+        {
+            path: "/academy/first-team",
+            name: "academy-first-team",
+            component: () => import("@/views/FirstTeamView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
+        {
+            path: "/academy/first-team/player/:id",
+            name: "academy-player-details",
+            component: () => import("@/views/PlayerDetailsView.vue"),
             meta: { requiresAuth: true, requiresRole: ["admin"] },
         },
     ],
