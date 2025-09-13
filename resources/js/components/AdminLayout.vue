@@ -209,6 +209,8 @@ import {
   StarIcon,
   NewspaperIcon,
   Cog6ToothIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Logo from './logo.vue'
@@ -263,11 +265,24 @@ const navigation = computed(() => {
 const managementItems = computed(() => {
   if (userRole.value !== 'admin' && userRole.value !== 'coach') return []
   
-  return [
+  const items = [
     { name: 'Manage Students', href: '/academy/students', icon: UserGroupIcon, current: route.path.startsWith('/academy/students') },
     { name: 'Training Programs', href: '/academy/programs', icon: AcademicCapIcon, current: route.path.startsWith('/academy/programs') },
-    { name: 'Settings', href: '/academy/settings', icon: Cog6ToothIcon, current: route.path.startsWith('/academy/settings') }
   ]
+  
+  // Add store management for admin only
+  if (userRole.value === 'admin') {
+    items.push(
+      { name: 'Products', href: '/academy/products', icon: ShoppingBagIcon, current: route.path.startsWith('/academy/products') },
+      { name: 'Orders', href: '/academy/orders', icon: ShoppingCartIcon, current: route.path.startsWith('/academy/orders') }
+    )
+  }
+  
+  items.push(
+    { name: 'Settings', href: '/academy/settings', icon: Cog6ToothIcon, current: route.path.startsWith('/academy/settings') }
+  )
+  
+  return items
 })
 
 const userNavigation = [

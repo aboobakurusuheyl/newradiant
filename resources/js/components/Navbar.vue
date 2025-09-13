@@ -48,6 +48,14 @@
           >
             News
           </RouterLink>
+          
+          <RouterLink 
+            to="/store" 
+            class="text-gray-700 hover:text-newradiant-blue px-4 py-2 rounded-md text-sm font-semibold transition-colors"
+            :class="{ 'text-newradiant-blue bg-blue-50': $route.path === '/store' }"
+          >
+            Store
+          </RouterLink>
 
           <!-- More Dropdown -->
           <div class="relative group">
@@ -161,6 +169,12 @@
           class="text-gray-700 hover:text-newradiant-blue block px-3 py-2 rounded-md text-base font-medium"
         >
           News
+        </RouterLink>
+        <RouterLink 
+          to="/store" 
+          class="text-gray-700 hover:text-newradiant-blue block px-3 py-2 rounded-md text-base font-medium"
+        >
+          Store
         </RouterLink>
         <RouterLink 
           to="/about" 

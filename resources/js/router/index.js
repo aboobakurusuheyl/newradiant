@@ -36,6 +36,11 @@ const router = createRouter({
             component: () => import("@/views/FixturesView.vue"),
         },
         {
+            path: "/store",
+            name: "store",
+            component: () => import("@/views/StoreView.vue"),
+        },
+        {
             path: "/login",
             name: "login",
             component: () => import("@/views/LoginView.vue"),
@@ -122,6 +127,18 @@ const router = createRouter({
             name: "academy-my-children",
             component: () => import("@/views/MyChildrenView.vue"),
             meta: { requiresAuth: true, requiresRole: ["parent"] },
+        },
+        {
+            path: "/academy/products",
+            name: "academy-products",
+            component: () => import("@/views/ProductsView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
+        {
+            path: "/academy/orders",
+            name: "academy-orders",
+            component: () => import("@/views/OrdersView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
         },
     ],
 });

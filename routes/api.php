@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentRequestController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\FixtureController;
@@ -61,6 +63,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('payment-requests', PaymentRequestController::class);
         Route::post('/payment-requests/{paymentRequest}/verify', [PaymentRequestController::class, 'verifyPayment']);
         Route::get('/students/{student}/payment-requests', [PaymentRequestController::class, 'getStudentPaymentRequests']);
+    });
+
+    // Store management (Admin only)
+    Route::middleware(['role:admin'])->group(function () {
+        Route::apiResource('products', ProductController::class);
+        Route::get('/products/categories', [ProductController::class, 'categories']);
+        Route::post('/products/{product}/stock', [ProductController::class, 'updateStock']);
+        
+        Route::apiResource('orders', OrderController::class);
+        Route::get('/orders/statistics', [OrderController::class, 'statistics']);
+        Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+        Route::post('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus']);
     });
     
     // Schedule management (Admin/Coach only)
