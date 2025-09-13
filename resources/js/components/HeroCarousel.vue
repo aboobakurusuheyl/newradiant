@@ -25,7 +25,7 @@
         ></div>
         
         <!-- Gradient Overlay with black blur from right -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-black/80"></div>
         
         <!-- Content -->
         <div class="relative h-full flex items-center">
