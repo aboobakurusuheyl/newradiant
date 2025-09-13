@@ -2,14 +2,28 @@
   <article class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
     <!-- Image -->
     <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span class="text-6xl">{{ newsItem.icon }}</span>
+      <!-- Featured Image -->
+      <img
+        v-if="newsItem.featured_image"
+        :src="getImageUrl(newsItem.featured_image)"
+        :alt="newsItem.title"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        @error="handleImageError"
+      />
+      
+      <!-- Fallback Icon -->
+      <div v-else class="absolute inset-0 flex items-center justify-center">
+        <span class="text-6xl">{{ getCategoryIcon(newsItem.category) }}</span>
       </div>
+      
+      <!-- Category Badge -->
       <div class="absolute top-4 left-4">
         <span class="px-3 py-1 bg-newradiant-blue text-white text-xs font-semibold rounded-full">
           {{ newsItem.category }}
         </span>
       </div>
+      
+      <!-- Hover Overlay -->
       <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
     </div>
 
@@ -58,6 +72,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const props = defineProps({
@@ -67,6 +82,8 @@ const props = defineProps({
   }
 })
 
+const imageError = ref(false)
+
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return date.toLocaleDateString('en-US', {
@@ -74,6 +91,44 @@ const formatDate = (dateString) => {
     month: 'long',
     day: 'numeric'
   })
+}
+
+const getImageUrl = (imagePath) => {
+  // If it's already a full URL, return as is
+  if (imagePath.startsWith('http')) {
+    return imagePath
+  }
+  
+  // If it starts with 'img/', it's a local image
+  if (imagePath.startsWith('img/')) {
+    return `/${imagePath}`
+  }
+  
+  // If it's a storage path, add /storage/ prefix
+  if (imagePath.startsWith('storage/')) {
+    return `/${imagePath}`
+  }
+  
+  // Default fallback
+  return `/${imagePath}`
+}
+
+const handleImageError = () => {
+  imageError.value = true
+}
+
+const getCategoryIcon = (category) => {
+  const icons = {
+    'general': '⚽',
+    'academy': '🎓',
+    'matches': '🏆',
+    'transfers': '👤',
+    'announcements': '📢',
+    'training': '🏃',
+    'facilities': '🏟️',
+    'community': '🤝'
+  }
+  return icons[category] || '📰'
 }
 </script>
 

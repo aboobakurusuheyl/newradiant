@@ -53,7 +53,7 @@
               <div class="w-4 h-4 bg-green-500 rounded-full"></div>
               Goalkeepers
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               <HomePlayerCard
                 v-for="player in playersByPosition.Goalkeeper"
                 :key="player.id"

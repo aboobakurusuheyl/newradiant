@@ -26,11 +26,11 @@
           </RouterLink>
           
           <RouterLink 
-            to="/academy" 
+            to="/first-team" 
             class="text-gray-700 hover:text-newradiant-blue px-4 py-2 rounded-md text-sm font-semibold transition-colors"
-            :class="{ 'text-newradiant-blue bg-blue-50': $route.path === '/academy' }"
+            :class="{ 'text-newradiant-blue bg-blue-50': $route.path === '/first-team' }"
           >
-            Academy
+            First Team
           </RouterLink>
 
           <RouterLink 
@@ -67,7 +67,7 @@
             </button>
             <div class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <RouterLink to="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</RouterLink>
-              <RouterLink to="/team" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">First Team</RouterLink>
+              <RouterLink to="/first-team" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">First Team</RouterLink>
               <RouterLink to="/store" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Store</RouterLink>
               <RouterLink to="/fan-portal" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Fan Portal</RouterLink>
               <RouterLink to="/contact" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contact</RouterLink>
@@ -153,10 +153,10 @@
           Home
         </RouterLink>
         <RouterLink 
-          to="/academy" 
+          to="/first-team" 
           class="text-gray-700 hover:text-newradiant-blue block px-3 py-2 rounded-md text-base font-medium"
         >
-          Academy
+          First Team
         </RouterLink>
         <RouterLink 
           to="/fixtures" 
