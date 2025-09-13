@@ -26,6 +26,8 @@ class HeroSection extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected $appends = ['image_url'];
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
@@ -54,5 +56,25 @@ class HeroSection extends Model
         return $this->is_active && 
                ($this->published_at === null || $this->published_at <= now()) &&
                ($this->expires_at === null || $this->expires_at >= now());
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return '/img/team.jpg'; // Default fallback image
+        }
+        
+        // If it's a full URL (external), return as is
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        
+        // If it's a storage path (uploaded image), return storage URL
+        if (str_starts_with($this->image, 'hero-sections/')) {
+            return '/storage/' . $this->image;
+        }
+        
+        // If it's just a filename (local image), return from img folder
+        return '/img/' . $this->image;
     }
 }

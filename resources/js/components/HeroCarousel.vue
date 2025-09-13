@@ -20,16 +20,8 @@
       >
         <!-- Background Image -->
         <div 
-          v-if="section.image"
           class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          :style="{ backgroundImage: `url(${getImageUrl(section.image)})` }"
-        ></div>
-        
-        <!-- Fallback Background Image from img folder -->
-        <div 
-          v-else
-          class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          :style="{ backgroundImage: `url(${getFallbackImage(section)})` }"
+          :style="{ backgroundImage: `url(${section.image_url || getFallbackImage(section)})` }"
         ></div>
         
         <!-- Gradient Overlay with black blur from right -->
@@ -75,17 +67,7 @@
               <!-- Right Side Content -->
               <div class="hidden lg:block">
                 <div class="relative">
-                  <div class="w-96 h-96 mx-auto bg-white bg-opacity-10 rounded-full flex items-center justify-center backdrop-blur-sm">
-                    <div class="text-center">
-                      <div class="w-24 h-24 mx-auto mb-4 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                      </div>
-                      <div class="text-xl font-semibold">New Radiant SC</div>
-                      <div class="text-sm opacity-80">Pride of Maldivian Football</div>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -185,12 +167,6 @@ const fetchHeroSections = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const getImageUrl = (imagePath) => {
-  if (!imagePath) return null
-  if (imagePath.startsWith('http')) return imagePath
-  return `/storage/${imagePath}`
 }
 
 const getFallbackImage = (section) => {
