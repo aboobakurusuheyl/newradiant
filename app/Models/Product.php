@@ -32,6 +32,8 @@ class Product extends Model
         'is_sale' => 'boolean',
     ];
 
+    protected $appends = ['image_url'];
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -49,6 +51,21 @@ class Product extends Model
         }
         
         return round((($this->price - $this->sale_price) / $this->price) * 100);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return '/img/player.png'; // Default fallback image
+        }
+
+        // If it's already a full URL (external), return as is
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        // If it's a local image, return the proper path
+        return '/img/' . $this->image;
     }
 
     public function isInStock()

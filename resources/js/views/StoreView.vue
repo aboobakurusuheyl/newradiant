@@ -64,42 +64,49 @@
         </div>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-newradiant-blue"></div>
+        <p class="mt-4 text-gray-600 text-lg">Loading products...</p>
+      </div>
+
       <!-- Products Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div 
           v-for="product in filteredProducts" 
           :key="product.id"
-          class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group"
+          class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group flex flex-col h-full"
         >
           <!-- Product Image -->
           <div class="relative aspect-square overflow-hidden">
             <img 
-              :src="product.image" 
+              :src="product.image_url || product.image" 
               :alt="product.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              @error="handleImageError"
             />
-            <div v-if="product.isNew" class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+            <div v-if="product.is_new" class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
               NEW
             </div>
-            <div v-if="product.sale" class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+            <div v-if="product.is_sale" class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
               SALE
             </div>
           </div>
 
           <!-- Product Info -->
-          <div class="p-4">
+          <div class="p-4 flex flex-col flex-grow">
             <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">{{ product.name }}</h3>
-            <p class="text-sm text-gray-600 mb-3">{{ product.description }}</p>
+            <p class="text-sm text-gray-600 mb-3 flex-grow">{{ product.description }}</p>
             
             <!-- Price -->
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-2">
-                <span v-if="product.sale" class="text-lg font-bold text-green-600">
-                  ${{ product.salePrice }}
+                <span v-if="product.is_sale" class="text-lg font-bold text-green-600">
+                  ${{ product.sale_price }}
                 </span>
                 <span :class="[
                   'text-lg font-bold',
-                  product.sale ? 'text-gray-400 line-through' : 'text-gray-900'
+                  product.is_sale ? 'text-gray-400 line-through' : 'text-gray-900'
                 ]">
                   ${{ product.price }}
                 </span>
@@ -129,10 +136,10 @@
               </div>
             </div>
 
-            <!-- Add to Cart Button -->
+            <!-- Add to Cart Button - Always at bottom -->
             <button 
               @click="addToCart(product)"
-              class="w-full bg-newradiant-blue text-white py-2 px-4 rounded-lg hover:bg-newradiant-dark-blue transition-colors font-medium"
+              class="w-full bg-newradiant-blue text-white py-2 px-4 rounded-lg hover:bg-newradiant-dark-blue transition-colors font-medium mt-auto"
             >
               Add to Cart
             </button>
@@ -186,7 +193,7 @@
               :key="item.id"
               class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg"
             >
-              <img :src="item.image" :alt="item.name" class="w-16 h-16 object-cover rounded" />
+              <img :src="item.image_url || item.image" :alt="item.name" class="w-16 h-16 object-cover rounded" @error="handleImageError" />
               <div class="flex-1">
                 <h3 class="font-medium text-gray-900">{{ item.name }}</h3>
                 <p class="text-sm text-gray-500">{{ item.size }}</p>
@@ -248,6 +255,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import api from '@/services/api'
 
 // Reactive data
 const selectedCategory = ref('all')
@@ -256,6 +264,8 @@ const sortBy = ref('name')
 const showCart = ref(false)
 const selectedSizes = ref({})
 const cartItems = ref([])
+const products = ref([])
+const loading = ref(true)
 
 // Categories
 const categories = ref([
@@ -266,139 +276,23 @@ const categories = ref([
   { id: 'merchandise', name: 'Merchandise' }
 ])
 
-// Sample products data
-const products = ref([
-  {
-    id: 1,
-    name: 'New Radiant Home Jersey 2024',
-    description: 'Official home jersey with club crest and sponsor logos',
-    price: 45.00,
-    salePrice: 35.00,
-    sale: true,
-    isNew: false,
-    category: 'jerseys',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    stock: 50
-  },
-  {
-    id: 2,
-    name: 'New Radiant Away Jersey 2024',
-    description: 'Official away jersey in classic white and blue',
-    price: 45.00,
-    salePrice: null,
-    sale: false,
-    isNew: true,
-    category: 'jerseys',
-    image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    stock: 30
-  },
-  {
-    id: 3,
-    name: 'New Radiant Training Kit',
-    description: 'Complete training kit for academy players',
-    price: 35.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'jerseys',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    stock: 25
-  },
-  {
-    id: 4,
-    name: 'New Radiant Scarf',
-    description: 'Official club scarf for match days',
-    price: 15.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 100
-  },
-  {
-    id: 5,
-    name: 'New Radiant Cap',
-    description: 'Adjustable cap with embroidered club logo',
-    price: 20.00,
-    salePrice: 15.00,
-    sale: true,
-    isNew: false,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop',
-    sizes: ['One Size'],
-    stock: 75
-  },
-  {
-    id: 6,
-    name: 'New Radiant Keychain',
-    description: 'Metal keychain with club crest',
-    price: 8.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 200
-  },
-  {
-    id: 7,
-    name: 'New Radiant Football',
-    description: 'Official match ball with club branding',
-    price: 25.00,
-    salePrice: null,
-    sale: false,
-    isNew: true,
-    category: 'equipment',
-    image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 40
-  },
-  {
-    id: 8,
-    name: 'New Radiant Water Bottle',
-    description: 'Insulated water bottle with club colors',
-    price: 18.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'equipment',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 60
-  },
-  {
-    id: 9,
-    name: 'New Radiant Mug',
-    description: 'Ceramic mug with club logo and colors',
-    price: 12.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'merchandise',
-    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 80
-  },
-  {
-    id: 10,
-    name: 'New Radiant Sticker Pack',
-    description: 'Set of 10 vinyl stickers with club designs',
-    price: 5.00,
-    salePrice: null,
-    sale: false,
-    isNew: false,
-    category: 'merchandise',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop',
-    sizes: [],
-    stock: 150
+// Methods
+const fetchProducts = async () => {
+  try {
+    loading.value = true
+    const response = await api.get('/products')
+    products.value = response.data.data || response.data
+  } catch (error) {
+    console.error('Error fetching products:', error)
+  } finally {
+    loading.value = false
   }
-])
+}
+
+const handleImageError = (event) => {
+  // Fallback to default product image
+  event.target.src = '/img/player.png'
+}
 
 // Computed properties
 const filteredProducts = computed(() => {
@@ -424,11 +318,11 @@ const filteredProducts = computed(() => {
       case 'name':
         return a.name.localeCompare(b.name)
       case 'price-low':
-        return (a.sale ? a.salePrice : a.price) - (b.sale ? b.salePrice : b.price)
+        return (a.is_sale ? a.sale_price : a.price) - (b.is_sale ? b.sale_price : b.price)
       case 'price-high':
-        return (b.sale ? b.salePrice : b.price) - (a.sale ? a.salePrice : a.price)
+        return (b.is_sale ? b.sale_price : b.price) - (a.is_sale ? a.sale_price : a.price)
       case 'newest':
-        return b.isNew - a.isNew
+        return b.is_new - a.is_new
       default:
         return 0
     }
@@ -439,7 +333,7 @@ const filteredProducts = computed(() => {
 
 const cartTotal = computed(() => {
   return cartItems.value.reduce((total, item) => {
-    return total + (item.sale ? item.salePrice : item.price) * item.quantity
+    return total + (item.sale ? item.price : item.price) * item.quantity
   }, 0).toFixed(2)
 })
 
@@ -457,9 +351,10 @@ const addToCart = (product) => {
     cartItems.value.push({
       id: product.id,
       name: product.name,
-      price: product.sale ? product.salePrice : product.price,
-      sale: product.sale,
-      image: product.image,
+      price: product.is_sale ? product.sale_price : product.price,
+      sale: product.is_sale,
+      image: product.image_url || product.image,
+      image_url: product.image_url || product.image,
       size: size || 'One Size',
       quantity: 1
     })
@@ -497,6 +392,9 @@ onMounted(() => {
   if (savedCart) {
     cartItems.value = JSON.parse(savedCart)
   }
+  
+  // Fetch products from API
+  fetchProducts()
 })
 
 // Save cart to localStorage whenever it changes

@@ -289,6 +289,31 @@ class ContentController extends Controller
     }
 
     /**
+     * Get public hero sections (for frontend display)
+     */
+    public function getPublicHeroSections(Request $request)
+    {
+        $query = HeroSection::active();
+
+        // Filter by type if specified
+        if ($request->has('type') && $request->type !== 'all') {
+            $query->byType($request->type);
+        }
+
+        // Get limit if specified (for carousel)
+        if ($request->has('limit')) {
+            $heroSections = $query->ordered()->limit($request->get('limit'))->get();
+        } else {
+            $heroSections = $query->ordered()->get();
+        }
+
+        return response()->json([
+            'data' => $heroSections,
+            'total' => $heroSections->count()
+        ]);
+    }
+
+    /**
      * Get content statistics
      */
     public function getContentStats()

@@ -28,6 +28,9 @@ Route::get('/players', [PlayerController::class, 'index']);
 Route::get('/players/{player}', [PlayerController::class, 'show']);
 Route::get('/players/position/{position}', [PlayerController::class, 'getByPosition']);
 Route::get('/players/team/stats', [PlayerController::class, 'getTeamStats']);
+Route::get('/hero-sections', [ContentController::class, 'getPublicHeroSections']);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -73,7 +76,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Store management (Admin only)
     Route::middleware(['role:admin'])->group(function () {
-        Route::apiResource('products', ProductController::class);
+        // Admin-only product management routes
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{product}', [ProductController::class, 'update']);
+        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
         Route::get('/products/categories', [ProductController::class, 'categories']);
         Route::post('/products/{product}/stock', [ProductController::class, 'updateStock']);
         
