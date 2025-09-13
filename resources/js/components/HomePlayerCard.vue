@@ -10,8 +10,17 @@
         :src="`/storage/${player.photo}`"
         :alt="player.display_name"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        @error="handleImageError"
       />
-      <div v-else class="w-full h-full flex items-center justify-center">
+      <img
+        v-else
+        src="/img/player.png"
+        :alt="player.display_name"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        @error="handleImageError"
+      />
+      <!-- Fallback when both images fail -->
+      <div class="w-full h-full flex items-center justify-center" style="display: none;">
         <UserIcon class="h-20 w-20 text-gray-400" />
       </div>
       
@@ -109,4 +118,15 @@ defineEmits(['click'])
 const positionBadgeClass = computed(() => {
   return props.player.position_badge_class || 'bg-gray-100 text-gray-800'
 })
+
+const handleImageError = (event) => {
+  // If the main image fails, try the fallback
+  if (event.target.src.includes('/storage/')) {
+    event.target.src = '/img/player.png'
+  } else if (event.target.src.includes('/img/player.png')) {
+    // If fallback also fails, show a placeholder
+    event.target.style.display = 'none'
+    event.target.nextElementSibling.style.display = 'flex'
+  }
+}
 </script>
