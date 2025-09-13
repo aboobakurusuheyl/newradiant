@@ -153,7 +153,7 @@ const fixturesLoading = ref(false)
 const fetchNews = async () => {
   try {
     loading.value = true
-    const response = await api.get('/news')
+    const response = await api.get('/news?limit=3')
     news.value = response.data.data.map(article => ({
       ...article,
       icon: '📰',

@@ -10,8 +10,23 @@ use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $limit = $request->get('limit', 10);
+        
+        if ($limit) {
+            $news = News::published()
+                ->with('author')
+                ->orderBy('published_at', 'desc')
+                ->limit($limit)
+                ->get();
+            
+            return response()->json([
+                'data' => $news,
+                'total' => $news->count()
+            ]);
+        }
+        
         $news = News::published()
             ->with('author')
             ->orderBy('published_at', 'desc')
