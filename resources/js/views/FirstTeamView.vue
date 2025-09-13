@@ -137,8 +137,17 @@
                       :src="`/storage/${player.photo}`"
                       :alt="player.display_name"
                       class="h-10 w-10 rounded-full object-cover"
+                      @error="handleImageError"
                     />
-                    <div v-else class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                    <img
+                      v-else
+                      src="/img/player.png"
+                      :alt="player.display_name"
+                      class="h-10 w-10 rounded-full object-cover"
+                      @error="handleImageError"
+                    />
+                    <!-- Fallback when both images fail -->
+                    <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center" style="display: none;">
                       <UserIcon class="h-6 w-6 text-gray-500" />
                     </div>
                   </div>
@@ -345,6 +354,17 @@ const closePlayerModal = () => {
 }
 
 // Removed viewPlayer method as it's not needed for admin list view
+
+const handleImageError = (event) => {
+  // If the main image fails, try the fallback
+  if (event.target.src.includes('/storage/')) {
+    event.target.src = '/img/player.png'
+  } else if (event.target.src.includes('/img/player.png')) {
+    // If fallback also fails, show a placeholder
+    event.target.style.display = 'none'
+    event.target.nextElementSibling.style.display = 'flex'
+  }
+}
 
 const editPlayer = (player) => {
   openPlayerModal(player)
