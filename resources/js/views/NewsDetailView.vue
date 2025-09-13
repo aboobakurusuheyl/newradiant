@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-50">
+    <!-- Dynamic Meta Tags -->
+    <MetaTags
+      :title="article ? `${article.title} - New Radiant SC` : 'News - New Radiant SC'"
+      :description="article ? article.excerpt || article.content?.substring(0, 160) + '...' : 'Latest news and updates from New Radiant Sports Club'"
+      :image="article && article.featured_image ? getImageUrl(article.featured_image) : '/og-news.svg'"
+      type="article"
+      :url="article ? `/news/${article.slug}` : '/news'"
+    />
     <!-- Loading State -->
     <div v-if="isLoading" class="py-16 bg-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,6 +143,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import api from '@/services/api'
+import MetaTags from '@/components/MetaTags.vue'
 
 const route = useRoute()
 const article = ref(null)

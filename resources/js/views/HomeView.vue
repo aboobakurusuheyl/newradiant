@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen bg-white">
+    <!-- Meta Tags for Homepage -->
+    <MetaTags
+      title="New Radiant SC - Pride of Maldivian Football"
+      description="Established 1979. Join our academy, support our first team, and be part of Maldivian football history."
+      image="/og-image.svg"
+      type="website"
+      url="/"
+    />
+    
     <!-- Hero Carousel -->
     <HeroCarousel />
 
@@ -137,6 +146,7 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '@/services/api'
+import MetaTags from '@/components/MetaTags.vue'
 import HeroCarousel from '@/components/HeroCarousel.vue'
 import NewsCard from '@/components/NewsCard.vue'
 import FixtureCard from '@/components/FixtureCard.vue'
