@@ -3,45 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class News extends Model
+class HeroSection extends Model
 {
     protected $fillable = [
         'title',
-        'content',
-        'excerpt',
-        'slug',
-        'featured_image',
+        'subtitle',
+        'description',
+        'image',
+        'button_text',
+        'button_link',
         'type',
-        'category',
-        'tags',
-        'is_published',
-        'is_featured',
+        'is_active',
         'sort_order',
         'published_at',
         'expires_at',
-        'meta_title',
-        'meta_description',
-        'author_id',
     ];
 
     protected $casts = [
-        'tags' => 'array',
-        'is_published' => 'boolean',
-        'is_featured' => 'boolean',
+        'is_active' => 'boolean',
         'published_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
 
-    public function author(): BelongsTo
+    public function scopeActive($query)
     {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('is_published', true)
+        return $query->where('is_active', true)
                     ->where(function($q) {
                         $q->whereNull('published_at')
                           ->orWhere('published_at', '<=', now());
@@ -52,24 +39,19 @@ class News extends Model
                     });
     }
 
-    public function scopeFeatured($query)
+    public function scopeByType($query, $type)
     {
-        return $query->where('is_featured', true);
-    }
-
-    public function scopeByCategory($query, $category)
-    {
-        return $query->where('category', $category);
+        return $query->where('type', $type);
     }
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order')->orderBy('published_at', 'desc');
+        return $query->orderBy('sort_order')->orderBy('created_at', 'desc');
     }
 
     public function isPublished()
     {
-        return $this->is_published && 
+        return $this->is_active && 
                ($this->published_at === null || $this->published_at <= now()) &&
                ($this->expires_at === null || $this->expires_at >= now());
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentRequestController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\FixtureController;
@@ -75,6 +76,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/orders/statistics', [OrderController::class, 'statistics']);
         Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus']);
         Route::post('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus']);
+    });
+
+    // Content management (Admin only)
+    Route::middleware(['role:admin'])->group(function () {
+        // News management
+        Route::get('/content/news', [ContentController::class, 'getNews']);
+        Route::post('/content/news', [ContentController::class, 'createNews']);
+        Route::put('/content/news/{news}', [ContentController::class, 'updateNews']);
+        Route::delete('/content/news/{news}', [ContentController::class, 'deleteNews']);
+        
+        // Hero sections management
+        Route::get('/content/hero-sections', [ContentController::class, 'getHeroSections']);
+        Route::post('/content/hero-sections', [ContentController::class, 'createHeroSection']);
+        Route::put('/content/hero-sections/{heroSection}', [ContentController::class, 'updateHeroSection']);
+        Route::delete('/content/hero-sections/{heroSection}', [ContentController::class, 'deleteHeroSection']);
+        
+        // Content statistics
+        Route::get('/content/stats', [ContentController::class, 'getContentStats']);
     });
     
     // Schedule management (Admin/Coach only)

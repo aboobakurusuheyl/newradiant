@@ -140,6 +140,18 @@ const router = createRouter({
             component: () => import("@/views/OrdersView.vue"),
             meta: { requiresAuth: true, requiresRole: ["admin"] },
         },
+        {
+            path: "/academy/news-management",
+            name: "academy-news-management",
+            component: () => import("@/views/NewsManagementView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
+        {
+            path: "/academy/hero-management",
+            name: "academy-hero-management",
+            component: () => import("@/views/HeroSectionManagementView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
     ],
 });
 

@@ -211,6 +211,7 @@ import {
   Cog6ToothIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
+  PhotoIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Logo from './logo.vue'
@@ -274,7 +275,9 @@ const managementItems = computed(() => {
   if (userRole.value === 'admin') {
     items.push(
       { name: 'Products', href: '/academy/products', icon: ShoppingBagIcon, current: route.path.startsWith('/academy/products') },
-      { name: 'Orders', href: '/academy/orders', icon: ShoppingCartIcon, current: route.path.startsWith('/academy/orders') }
+      { name: 'Orders', href: '/academy/orders', icon: ShoppingCartIcon, current: route.path.startsWith('/academy/orders') },
+      { name: 'News Management', href: '/academy/news-management', icon: NewspaperIcon, current: route.path.startsWith('/academy/news-management') },
+      { name: 'Hero Management', href: '/academy/hero-management', icon: PhotoIcon, current: route.path.startsWith('/academy/hero-management') }
     )
   }
   
