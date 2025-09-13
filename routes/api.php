@@ -31,6 +31,10 @@ Route::get('/players/team/stats', [PlayerController::class, 'getTeamStats']);
 Route::get('/hero-sections', [ContentController::class, 'getPublicHeroSections']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
+Route::get('/coaching-staff', function (Request $request) {
+    $coaches = \App\Models\User::where('role', 'coach')->get();
+    return response()->json($coaches);
+});
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {

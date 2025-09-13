@@ -25,8 +25,15 @@
           :style="{ backgroundImage: `url(${getImageUrl(section.image)})` }"
         ></div>
         
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/50"></div>
+        <!-- Fallback Background Image from img folder -->
+        <div 
+          v-else
+          class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          :style="{ backgroundImage: `url(${getFallbackImage(section)})` }"
+        ></div>
+        
+        <!-- Gradient Overlay with black blur from right -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/80"></div>
         
         <!-- Content -->
         <div class="relative h-full flex items-center">
@@ -42,7 +49,7 @@
                 </div>
                 
                 <!-- Title -->
-                <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight line-clamp-3">
                   {{ section.title }}
                 </h1>
                 
@@ -70,8 +77,13 @@
                 <div class="relative">
                   <div class="w-96 h-96 mx-auto bg-white bg-opacity-10 rounded-full flex items-center justify-center backdrop-blur-sm">
                     <div class="text-center">
-                      <div class="text-6xl font-bold mb-4">⚽</div>
+                      <div class="w-24 h-24 mx-auto mb-4 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
                       <div class="text-xl font-semibold">New Radiant SC</div>
+                      <div class="text-sm opacity-80">Pride of Maldivian Football</div>
                     </div>
                   </div>
                 </div>
@@ -148,6 +160,26 @@ const fetchHeroSections = async () => {
         button_link: '/academy',
         type: 'hero',
         image: null
+      },
+      {
+        id: 2,
+        title: 'Championship Legacy - Building Future Stars',
+        subtitle: 'Academy Excellence',
+        description: 'Our youth academy continues to produce talented players who represent the future of Maldivian football. Join our comprehensive training program.',
+        button_text: 'View First Team',
+        button_link: '/first-team',
+        type: 'announcement',
+        image: null
+      },
+      {
+        id: 3,
+        title: 'Community Spirit - United in Blue',
+        subtitle: 'Fan Engagement',
+        description: 'Be part of the New Radiant family. Support our team, join our community events, and celebrate the beautiful game with fellow fans.',
+        button_text: 'Visit Store',
+        button_link: '/store',
+        type: 'promotion',
+        image: null
       }
     ]
   } finally {
@@ -159,6 +191,21 @@ const getImageUrl = (imagePath) => {
   if (!imagePath) return null
   if (imagePath.startsWith('http')) return imagePath
   return `/storage/${imagePath}`
+}
+
+const getFallbackImage = (section) => {
+  // Use images from the img folder as fallbacks
+  const fallbackImages = [
+    '/img/team.jpg',
+    '/img/champ.jpg',
+    '/img/im2.jpg',
+    '/img/image.jpg',
+    '/img/img.jpg'
+  ]
+  
+  // Use section index to pick a consistent fallback image
+  const index = (section.id || 0) % fallbackImages.length
+  return fallbackImages[index]
 }
 
 const getSlideStyle = (section) => {
@@ -209,3 +256,12 @@ onUnmounted(() => {
   stopAutoplay()
 })
 </script>
+
+<style scoped>
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
