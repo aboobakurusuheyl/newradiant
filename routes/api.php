@@ -42,6 +42,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     
+    // Member routes
+    Route::get('/my-students', function (Request $request) {
+        $user = $request->user();
+        $students = \App\Models\Student::where('guardian_id', $user->id)
+            ->with(['user', 'assignedCoach', 'payments'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return response()->json($students);
+    });
+    
     // Users (for coach selection)
     Route::get('/users', function (Request $request) {
         $role = $request->query('role');

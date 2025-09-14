@@ -1,5 +1,12 @@
 <template>
-  <AdminLayout>
+  <div v-if="authStore.isMember && !authStore.isAdmin" class="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div class="text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Redirecting to Member Dashboard...</h2>
+      <p class="text-gray-600">Please wait while we redirect you to your member dashboard.</p>
+    </div>
+  </div>
+  
+  <AdminLayout v-else>
     <!-- Dashboard Content -->
     <div class="space-y-8">
       <!-- Role-based Dashboard -->
@@ -345,6 +352,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
 import AdminLayout from '@/components/AdminLayout.vue'
@@ -355,6 +363,7 @@ import {
   CalendarIcon 
 } from '@heroicons/vue/24/outline'
 
+const router = useRouter()
 const authStore = useAuthStore()
 
 const schedules = ref([])
@@ -464,6 +473,12 @@ const loadParentData = async () => {
 }
 
 onMounted(async () => {
+  // Redirect members to member dashboard
+  if (authStore.isMember && !authStore.isAdmin) {
+    router.push('/member-dashboard')
+    return
+  }
+
   try {
     const response = await api.get('/dashboard')
     const data = response.data

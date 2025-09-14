@@ -84,18 +84,24 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isMember()
+    {
+        return $this->role === 'member';
+    }
+
+    // Legacy methods for backward compatibility (will be removed)
     public function isCoach()
     {
-        return $this->role === 'coach';
+        return $this->role === 'member'; // Members can be coaches
     }
 
     public function isStudent()
     {
-        return $this->role === 'student';
+        return $this->role === 'member'; // Members can be students
     }
 
     public function isParent()
     {
-        return $this->role === 'parent';
+        return $this->role === 'member'; // Members can be parents
     }
 }
