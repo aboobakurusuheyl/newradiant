@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             NewsSeeder::class,
             FixtureSeeder::class,
+            HeroSectionSeeder::class,
+            PlayerSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

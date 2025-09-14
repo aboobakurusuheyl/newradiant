@@ -60,22 +60,6 @@
         
         <!-- Fan Card Section -->
         <div class="mb-8">
-          <!-- Debug Information -->
-          <div class="bg-gray-100 p-4 rounded mb-4">
-            <h4 class="font-bold">Debug Info:</h4>
-            <p>User: {{ authStore.user ? authStore.user.name : 'Loading...' }}</p>
-            <p>Enrolled Students Count: {{ enrolledStudents.length }}</p>
-            <p>Loading: {{ loading }}</p>
-            <div v-if="enrolledStudents.length > 0">
-              <p>Students:</p>
-              <ul>
-                <li v-for="student in enrolledStudents" :key="student.id">
-                  {{ student.age_group }} - {{ student.position }} ({{ student.enrollment_status }})
-                </li>
-              </ul>
-            </div>
-          </div>
-          
           <FanCard :user="authStore.user" :enrolled-students="enrolledStudents" />
         </div>
 
