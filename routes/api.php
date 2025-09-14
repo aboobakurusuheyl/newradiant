@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Member routes
     Route::get('/my-students', function (Request $request) {
         $user = $request->user();
-        $students = \App\Models\Student::where('guardian_id', $user->id)
+        $students = \App\Models\Student::where('user_id', $user->id)
             ->with(['user', 'assignedCoach', 'payments'])
             ->orderBy('created_at', 'desc')
             ->get();

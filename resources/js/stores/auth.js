@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     const isAuthenticated = computed(() => !!token.value && !!user.value);
     const isAdmin = computed(() => user.value?.role === "admin");
+    const isMember = computed(() => user.value?.role === "member");
     const isCoach = computed(() => user.value?.role === "coach");
     const isStudent = computed(() => user.value?.role === "student");
     const isParent = computed(() => user.value?.role === "parent");
@@ -98,6 +99,7 @@ export const useAuthStore = defineStore("auth", () => {
         isLoading,
         isAuthenticated,
         isAdmin,
+        isMember,
         isCoach,
         isStudent,
         isParent,

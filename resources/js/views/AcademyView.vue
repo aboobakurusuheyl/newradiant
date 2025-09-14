@@ -1,12 +1,5 @@
 <template>
-  <div v-if="authStore.isMember && !authStore.isAdmin" class="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div class="text-center">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Redirecting to Member Dashboard...</h2>
-      <p class="text-gray-600">Please wait while we redirect you to your member dashboard.</p>
-    </div>
-  </div>
-  
-  <AdminLayout v-else>
+  <AdminLayout>
     <!-- Dashboard Content -->
     <div class="space-y-8">
       <!-- Role-based Dashboard -->
@@ -57,6 +50,128 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Dashboard -->
+      <div v-else-if="authStore.isMember && !authStore.isAdmin" class="space-y-8">
+        <h2 class="text-3xl font-bold text-gray-900">Member Dashboard</h2>
+        
+        <!-- Fan Card Section -->
+        <div class="mb-8">
+          <!-- Debug Information -->
+          <div class="bg-gray-100 p-4 rounded mb-4">
+            <h4 class="font-bold">Debug Info:</h4>
+            <p>User: {{ authStore.user ? authStore.user.name : 'Loading...' }}</p>
+            <p>Enrolled Students Count: {{ enrolledStudents.length }}</p>
+            <p>Loading: {{ loading }}</p>
+            <div v-if="enrolledStudents.length > 0">
+              <p>Students:</p>
+              <ul>
+                <li v-for="student in enrolledStudents" :key="student.id">
+                  {{ student.age_group }} - {{ student.position }} ({{ student.enrollment_status }})
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <FanCard :user="authStore.user" :enrolled-students="enrolledStudents" />
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                  <UserGroupIcon class="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Enrolled Students</p>
+                <p class="text-2xl font-semibold text-gray-900">{{ enrolledStudents.length }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                  <CheckCircleIcon class="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Active Students</p>
+                <p class="text-2xl font-semibold text-gray-900">{{ activeStudents.length }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                  <ClockIcon class="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Pending Approvals</p>
+                <p class="text-2xl font-semibold text-gray-900">{{ pendingStudents.length }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <router-link
+              to="/academy/enroll-child"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <UserPlusIcon class="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">Enroll New Child</p>
+                <p class="text-sm text-gray-500">Register a new student</p>
+              </div>
+            </router-link>
+
+            <router-link
+              to="/academy/my-children"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <UserGroupIcon class="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">My Children</p>
+                <p class="text-sm text-gray-500">View enrolled students</p>
+              </div>
+            </router-link>
+
+            <router-link
+              to="/academy/schedules"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <CalendarIcon class="w-6 h-6 text-purple-600" />
+                </div>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">Schedules</p>
+                <p class="text-sm text-gray-500">View training sessions</p>
+              </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -360,8 +475,13 @@ import {
   UsersIcon, 
   AcademicCapIcon, 
   CurrencyDollarIcon, 
-  CalendarIcon 
+  CalendarIcon,
+  UserGroupIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  UserPlusIcon
 } from '@heroicons/vue/24/outline'
+import FanCard from '@/components/FanCard.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -378,6 +498,10 @@ const children = ref([])
 const paymentRequests = ref([])
 const recentActivity = ref([])
 
+// Member-specific data
+const enrolledStudents = ref([])
+const loading = ref(false)
+
 // Computed properties for parent dashboard
 const activeChildren = computed(() => {
   return children.value.filter(child => child.enrollment_status === 'approved').length
@@ -393,10 +517,33 @@ const upcomingSessions = computed(() => {
   return schedules.value.length
 })
 
+// Member dashboard computed properties
+const activeStudents = computed(() => {
+  return enrolledStudents.value.filter(student => student.enrollment_status === 'approved').length
+})
+
+const pendingStudents = computed(() => {
+  return enrolledStudents.value.filter(student => student.enrollment_status === 'pending').length
+})
+
 // Helper methods
 const getInitials = (name) => {
   if (!name) return 'U'
   return name.split(' ').map(n => n[0]).join('').toUpperCase()
+}
+
+// Fetch enrolled students for members
+const fetchEnrolledStudents = async () => {
+  try {
+    loading.value = true
+    const response = await api.get('/my-students')
+    enrolledStudents.value = response.data
+  } catch (error) {
+    console.error('Error fetching enrolled students:', error)
+    enrolledStudents.value = []
+  } finally {
+    loading.value = false
+  }
 }
 
 const getStatusText = (status) => {
@@ -473,9 +620,9 @@ const loadParentData = async () => {
 }
 
 onMounted(async () => {
-  // Redirect members to member dashboard
+  // Fetch member data if user is a member
   if (authStore.isMember && !authStore.isAdmin) {
-    router.push('/member-dashboard')
+    await fetchEnrolledStudents()
     return
   }
 
