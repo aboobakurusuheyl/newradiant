@@ -14,10 +14,14 @@ use App\Http\Controllers\Api\PlayerController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\FixtureController;
+use App\Http\Controllers\EnrollmentController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// Public enrollment form
+Route::post('/enrollments', [EnrollmentController::class, 'store']);
 
 // Public content routes
 Route::get('/news', [NewsController::class, 'index']);
@@ -119,6 +123,12 @@ Route::middleware('auth:sanctum')->group(function () {
         
         // Content statistics
         Route::get('/content/stats', [ContentController::class, 'getContentStats']);
+        
+        // Enrollment management
+        Route::get('/enrollments', [EnrollmentController::class, 'index']);
+        Route::get('/enrollments/{enrollment}', [EnrollmentController::class, 'show']);
+        Route::put('/enrollments/{enrollment}', [EnrollmentController::class, 'update']);
+        Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
     });
 
     // First team management (Admin only)

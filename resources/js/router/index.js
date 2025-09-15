@@ -51,6 +51,11 @@ const router = createRouter({
             component: () => import("@/views/StoreView.vue"),
         },
         {
+            path: "/enroll",
+            name: "enroll",
+            component: () => import("@/views/EnrollmentView.vue"),
+        },
+        {
             path: "/login",
             name: "login",
             component: () => import("@/views/LoginView.vue"),
@@ -172,6 +177,12 @@ const router = createRouter({
             path: "/academy/first-team/player/:id",
             name: "academy-player-details",
             component: () => import("@/views/PlayerDetailsView.vue"),
+            meta: { requiresAuth: true, requiresRole: ["admin"] },
+        },
+        {
+            path: "/academy/enrollments",
+            name: "academy-enrollments",
+            component: () => import("@/views/EnrollmentManagementView.vue"),
             meta: { requiresAuth: true, requiresRole: ["admin"] },
         },
     ],

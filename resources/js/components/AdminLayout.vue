@@ -275,6 +275,7 @@ const managementItems = computed(() => {
   // Add store management for admin only
   if (userRole.value === 'admin') {
     items.push(
+      { name: 'Enrollments', href: '/academy/enrollments', icon: UserGroupIcon, current: route.path.startsWith('/academy/enrollments') },
       { name: 'First Team', href: '/academy/first-team', icon: TrophyIcon, current: route.path.startsWith('/academy/first-team') },
       { name: 'Products', href: '/academy/products', icon: ShoppingBagIcon, current: route.path.startsWith('/academy/products') },
       { name: 'Orders', href: '/academy/orders', icon: ShoppingCartIcon, current: route.path.startsWith('/academy/orders') },

@@ -57,6 +57,13 @@
             Store
           </RouterLink>
 
+          <RouterLink 
+            to="/enroll" 
+            class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-md text-sm font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-md"
+          >
+            Enroll Now
+          </RouterLink>
+
           <!-- More Dropdown -->
           <div class="relative group">
             <button class="text-gray-700 hover:text-newradiant-blue px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center">
@@ -175,6 +182,12 @@
           class="text-gray-700 hover:text-newradiant-blue block px-3 py-2 rounded-md text-base font-medium"
         >
           Store
+        </RouterLink>
+        <RouterLink 
+          to="/enroll" 
+          class="bg-gradient-to-r from-green-600 to-green-700 text-white block px-3 py-2 rounded-md text-base font-medium hover:from-green-700 hover:to-green-800 transition-all duration-200"
+        >
+          Enroll Now
         </RouterLink>
         <RouterLink 
           to="/about" 
