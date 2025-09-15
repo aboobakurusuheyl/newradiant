@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-gray-100 py-8">
     <EnrollmentForm />
   </div>
 </template>
