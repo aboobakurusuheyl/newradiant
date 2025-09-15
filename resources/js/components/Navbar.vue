@@ -84,6 +84,8 @@
 
         <!-- Auth Section -->
         <div class="hidden lg:flex items-center space-x-4">
+          <!-- Commented out for cleaner navigation -->
+          <!--
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
             <RouterLink 
               to="/academy" 
@@ -133,6 +135,7 @@
               Register
             </RouterLink>
           </div>
+          -->
         </div>
 
         <!-- Mobile menu button -->
@@ -202,6 +205,8 @@
           Contact
         </RouterLink>
         
+        <!-- Commented out for cleaner navigation -->
+        <!--
         <div v-if="authStore.isAuthenticated" class="pt-4 pb-3 border-t border-gray-200">
           <div class="flex items-center px-3">
             <div class="w-10 h-10 bg-gradient-to-br from-newradiant-blue to-newradiant-light-blue rounded-full flex items-center justify-center">
@@ -242,6 +247,7 @@
             Register
           </RouterLink>
         </div>
+        -->
       </div>
     </div>
   </nav>
